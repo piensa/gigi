@@ -2,3 +2,6 @@ pandas
 requests
 mplleaflet
 jupyter
+us
+descartes
+shapely
