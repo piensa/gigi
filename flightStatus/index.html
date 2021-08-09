@@ -32,8 +32,18 @@
             ));
 
             function onEachFeature(feature, layer) {
-                var popupContent = '<p>' + feature.ID + '</p>';
+                var popupContent = '<p>Airline: ' + feature.properties.airlineCode + '</p><p>Flight number: ' + feature.properties.flightNumberInfo + '</p>';
                 layer.bindPopup(popupContent);
+
+                var departure = [feature.properties.departureAirportLatitude, feature.properties.departureAirportLongitude];
+                var destination = [feature.properties.destinationAirportLatitude, feature.properties.destinationAirportLongitude];
+                var departureMarker = L.marker(departure).addTo(map);
+                var destinationMarker = L.marker(destination).addTo(map);
+
+                departureMarker.bindPopup(feature.properties.departureAirportCodeIata);
+                destinationMarker.bindPopup(feature.properties.destinationAirportCodeIata);
+
+                map.fitBounds([departure, destination]);
             }
 
             var geojsonLayer = L.geoJSON.ajax('flightStatus.geojson', {
@@ -42,10 +52,6 @@
                     return {color: 'blue'}
                 }
             }).addTo(map);
-
-            geojsonLayer.on('data:loaded', function() {
-                map.fitBounds(geojsonLayer.getBounds())
-            })
         </script>
     </body>
 </html>
